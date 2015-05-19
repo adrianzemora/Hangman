@@ -49,7 +49,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="TryCharCommand.cs" />
+    <Compile Include="UnrevealedWord.cs" />
+    <Compile Include="InputValidator.cs" />
+    <Compile Include="Life.cs" />
+    <Compile Include="NotifyPropertyChanged.cs" />
+    <Compile Include="Command.cs" />
     <Compile Include="Word.cs" />
     <Compile Include="WordLetter.cs" />
     <Page Include="MainWindow.xaml">

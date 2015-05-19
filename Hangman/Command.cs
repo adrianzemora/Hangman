@@ -3,13 +3,13 @@ using System.Windows.Input;
 
 namespace Hangman
 {
-    public class TryLetterCommand : ICommand
+    public class Command : ICommand
     {
         private readonly Action action;
 
         public event EventHandler CanExecuteChanged = delegate { };
 
-        public TryLetterCommand(Action action)
+        public Command(Action action)
         {
             this.action = action;
         }

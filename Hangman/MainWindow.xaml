@@ -39,9 +39,10 @@
         </WrapPanel>
         <Button Content="Try the selected letter" Command="{Binding TryLetterCommand}" Margin="20,262,378.6,11.4"></Button>
         <Label Content="Lives Left:" HorizontalAlignment="Left" Margin="289,285,0,0" VerticalAlignment="Top"/>
-        <Grid Margin="355,284,9.6,10.4">
-            <ProgressBar  Value="6" Maximum="6"></ProgressBar>
-            <Label Content="6" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <Grid Margin="355,284,9.6,10.4" >
+            <ProgressBar  Value="{Binding Life.Current}" Maximum="{Binding Life.Maximum}"></ProgressBar>
+            <Label Content="{Binding Life.Current}" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
         </Grid>
+
     </Grid>
 </Window>

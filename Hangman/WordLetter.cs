@@ -1,15 +1,26 @@
 ﻿
 namespace Hangman
 {
-    public class WordLetter
+    public class WordLetter : NotifyPropertyChanged
     {
-        public string Value { get; set; }
-        public string DisplayValue { get; set; }
+        private string displayValue;
+
+        public string Value { get; private set; }
+
+        public string DisplayValue
+        {
+            get { return displayValue; }
+            set
+            {
+                displayValue = value;
+                OnPropertyChanged("DisplayValue");
+            }
+        }
 
         public WordLetter(string value)
         {
             Value = value;
-            DisplayValue = "_";
+            displayValue = "_";
         }
     }
 }
