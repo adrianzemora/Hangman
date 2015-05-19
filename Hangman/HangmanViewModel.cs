@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -9,8 +8,7 @@ namespace Hangman
 {
     public class HangmanViewModel
     {
-        private UnrevealedWord unrevealedWord;
-        private readonly InputValidator inputValidator;
+        private readonly UnrevealedWord unrevealedWord;
         public ObservableCollection<string> UntriedLetters { get; private set; }
         public ObservableCollection<WordLetter> WordLetters { get; private set; }
         public Life Life { get; set; }
@@ -19,7 +17,6 @@ namespace Hangman
 
         public HangmanViewModel()
         {
-            inputValidator = new InputValidator();
             string word = Word.GetRandom();
             unrevealedWord = new UnrevealedWord(word);
 
@@ -27,93 +24,55 @@ namespace Hangman
             WordLetters = new ObservableCollection<WordLetter>(unrevealedWord.Letters);
             TryLetterCommand = new Command(TryLetter);
             Life = new Life(6);
-            SetHint();
-        }
-
-        private static List<WordLetter> GetWordLetters(string word)
-        {
-            var letters = new List<WordLetter>();
-            foreach (var letter in word)
-            {
-                letters.Add(new WordLetter(letter.ToString()));
-            }
-            return letters;
-        }
-
-        private void SetHint()
-        {
-            SelectedLetter = WordLetters[0].Value;
-            RevealLetter();
-
-            UntriedLetters.Remove(SelectedLetter);
-
-            SelectedLetter = WordLetters[WordLetters.Count - 1].Value;
-            RevealLetter();
-
-            UntriedLetters.Remove(SelectedLetter);
         }
 
 
         private void TryLetter()
         {
-            if (!inputValidator.IsLetterValid(WordLetters, SelectedLetter))
+            if (!unrevealedWord.IsValidLetter(SelectedLetter))
             {
-                Life.Current--;
-                if (!LivesLeft())
+                DecreaseLife();
+
+                if (LivesLeft())
                 {
-                    RevealAll();
-                    MessageBoxResult choice = MessageBox.Show(string.Format("Try Again?"),
-                        "Game Over", MessageBoxButton.YesNo, MessageBoxImage.Error);
-
-                    if (choice == MessageBoxResult.Yes)
-                    {
-                        Process.Start(Application.ResourceAssembly.Location);
-                    }
-                    Application.Current.Shutdown();
-
+                    return;
                 }
-                UntriedLetters.Remove(SelectedLetter);
-                return;
-            }
 
-            RevealLetter();
-
-            if (!UnrevealedExist())
-            {
-                MessageBoxResult choice = MessageBox.Show("Try Again?", "Winner", MessageBoxButton.YesNo, MessageBoxImage.Asterisk);
-                if (choice == MessageBoxResult.Yes)
+                unrevealedWord.Reveal();
+                if (RestartGame())
                 {
                     Process.Start(Application.ResourceAssembly.Location);
                 }
 
                 Application.Current.Shutdown();
             }
-
-            UntriedLetters.Remove(SelectedLetter);
-        }
-
-        private void RevealAll()
-        {
-            foreach (var wordLetter in WordLetters)
+            else
             {
-                wordLetter.DisplayValue = wordLetter.Value;
-            }
-        }
 
-        private bool UnrevealedExist()
-        {
-            return WordLetters.Any(letter => letter.DisplayValue != letter.Value);
-        }
+                unrevealedWord.RevealLetter(SelectedLetter);
 
-        private void RevealLetter()
-        {
-            foreach (var wordLetter in WordLetters)
-            {
-                if (wordLetter.Value == SelectedLetter)
+                if (unrevealedWord.IsRevealed())
                 {
-                    wordLetter.DisplayValue = SelectedLetter;
+                    if (RestartGame())
+                    {
+                        Process.Start(Application.ResourceAssembly.Location);
+                    }
+
+                    Application.Current.Shutdown();
                 }
             }
+
+        }
+
+        private void DecreaseLife()
+        {
+            Life.Current--;
+        }
+
+        private bool RestartGame()
+        {
+            return MessageBox.Show(string.Format("Try Again?"), "Game Over", MessageBoxButton.YesNo,
+                MessageBoxImage.Asterisk) == MessageBoxResult.Yes;
         }
 
         private static IEnumerable<string> GetAllLetters()
@@ -131,5 +90,6 @@ namespace Hangman
         {
             return Life.Current > 0;
         }
+
     }
 }

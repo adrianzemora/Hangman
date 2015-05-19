@@ -40,6 +40,15 @@ namespace Hangman
             return Letters.Any(wordLetter => wordLetter.Value == letter);
         }
 
+
+        public void Reveal()
+        {
+            foreach (var wordLetter in Letters)
+            {
+                wordLetter.DisplayValue = wordLetter.Value;
+            }
+        }
+
         private void SetHints()
         {
             RevealLetter(Letters[0].Value);
