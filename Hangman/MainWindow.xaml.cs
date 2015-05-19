@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 
-namespace Hangman.UI
+namespace Hangman
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

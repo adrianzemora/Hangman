@@ -2,11 +2,12 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace Hangman.UI
+namespace Hangman
 {
     public class HangmanViewModel
     {
         public ObservableCollection<string> UntriedLetters { get; private set; }
+        public ObservableCollection<WordLetter> WordLetters { get; private set; }
         public string SelectedLetter { get; set; }
         public ICommand TryLetterCommand { get; private set; }
 
@@ -14,6 +15,17 @@ namespace Hangman.UI
         {
             UntriedLetters = new ObservableCollection<string>(GetAllLetters());
             TryLetterCommand = new TryLetterCommand(TryLetter);
+            WordLetters = new ObservableCollection<WordLetter>(GetWordLetters(Word.GetRandom()));
+        }
+
+        private static List<WordLetter> GetWordLetters(string word)
+        {
+            var letters = new List<WordLetter>();
+            foreach (var letter in word)
+            {
+                letters.Add(new WordLetter(letter.ToString()));
+            }
+            return letters;
         }
 
         private void TryLetter()

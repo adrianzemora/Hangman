@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hangman.Properties;
 
-namespace Hangman.UI
+namespace Hangman
 {
     internal static class Word
     {

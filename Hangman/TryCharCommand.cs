@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Hangman.UI
+namespace Hangman
 {
     public class TryLetterCommand : ICommand
     {
@@ -22,8 +21,6 @@ namespace Hangman.UI
 
         public bool CanExecute(object parameter)
         {
-            Button button = (Button)parameter;
-
             return true;
         }
     }
