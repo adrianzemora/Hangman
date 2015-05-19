@@ -9,6 +9,7 @@ namespace Hangman
 {
     public class HangmanViewModel
     {
+        private UnrevealedWord unrevealedWord;
         private readonly InputValidator inputValidator;
         public ObservableCollection<string> UntriedLetters { get; private set; }
         public ObservableCollection<WordLetter> WordLetters { get; private set; }
@@ -20,9 +21,10 @@ namespace Hangman
         {
             inputValidator = new InputValidator();
             string word = Word.GetRandom();
+            unrevealedWord = new UnrevealedWord(word);
 
             UntriedLetters = new ObservableCollection<string>(GetAllLetters());
-            WordLetters = new ObservableCollection<WordLetter>(GetWordLetters(word));
+            WordLetters = new ObservableCollection<WordLetter>(unrevealedWord.Letters);
             TryLetterCommand = new Command(TryLetter);
             Life = new Life(6);
             SetHint();
