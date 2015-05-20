@@ -9,17 +9,19 @@ namespace Hangman
     {
         private readonly UnrevealedWord unrevealedWord;
 
-        public Life Life { get; private set; }
-        public IList<string> InvalidLetters { get; private set; }
+        public int MaximumLife { get; private set; }
+        public int CurrentLife { get; private set; }
+        public IList<char> InvalidLetters { get; private set; }
 
         public HangmanGame(UnrevealedWord unrevealedWord)
         {
             this.unrevealedWord = unrevealedWord;
-            Life = new Life(6);
-            InvalidLetters = new List<string>();
+            InvalidLetters = new List<char>();
+            MaximumLife = 6;
+            CurrentLife = MaximumLife;
         }
 
-        public void TryLetter(string letter)
+        public void TryLetter(char letter)
         {
             if (InvalidLetters.Contains(letter))
             {
@@ -35,10 +37,10 @@ namespace Hangman
             ProcessValidLetter(letter);
         }
 
-        private void ProcessInvalidLetter(string letter)
+        private void ProcessInvalidLetter(char letter)
         {
             InvalidLetters.Add(letter);
-            Life.Current--;
+            CurrentLife--;
 
             if (LivesLeft())
             {
@@ -55,7 +57,7 @@ namespace Hangman
             Application.Current.Shutdown();
         }
 
-        private void ProcessValidLetter(string letter)
+        private void ProcessValidLetter(char letter)
         {
             unrevealedWord.RevealLetter(letter);
 
@@ -74,7 +76,7 @@ namespace Hangman
 
         private bool LivesLeft()
         {
-            return Life.Current > 0;
+            return CurrentLife > 0;
         }
 
         private static bool RestartGame()

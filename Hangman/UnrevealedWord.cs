@@ -13,13 +13,13 @@ namespace Hangman
             Letters = new List<WordLetter>();
             foreach (var letter in word)
             {
-                Letters.Add(new WordLetter(letter.ToString()));
+                Letters.Add(new WordLetter(letter));
             }
 
             SetHints();
         }
 
-        public void RevealLetter(string letter)
+        public void RevealLetter(char letter)
         {
             foreach (var wordLetter in Letters)
             {
@@ -35,7 +35,7 @@ namespace Hangman
             return Letters.All(letter => letter.Value == letter.DisplayValue);
         }
 
-        public bool IsValidLetter(string letter)
+        public bool IsValidLetter(char letter)
         {
             return Letters.Any(wordLetter => wordLetter.Value == letter);
         }

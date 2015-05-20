@@ -19,7 +19,7 @@
             </ItemsControl>
         </WrapPanel>
         <WrapPanel  HorizontalAlignment="Left" Height="112" Margin="20,83,0,0" VerticalAlignment="Top" Width="493">
-            <ListBox BorderThickness="0" ItemsSource="{Binding AllLetters}" SelectedItem="{Binding SelectedLetter}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox BorderThickness="0" ItemsSource="{Binding UserPossibilities}" SelectedItem="{Binding UserChoice}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel></WrapPanel>
@@ -39,8 +39,8 @@
             </ListBox>
         </WrapPanel>
         <WrapPanel Margin="20,200,20.6,60.4">
-            <Label Content="Invalid letters:" BorderThickness="1"></Label>
-            <ItemsControl ItemsSource="{Binding InvalidLetters}">
+            <Label Content="Misguessed letters:" BorderThickness="1"></Label>
+            <ItemsControl ItemsSource="{Binding MisGuessedLetters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal"></WrapPanel>

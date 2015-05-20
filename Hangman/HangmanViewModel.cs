@@ -8,52 +8,52 @@ namespace Hangman
     {
         private readonly HangmanGame hangmanGame;
 
-        public ObservableCollection<string> AllLetters { get; private set; }
-        public ObservableCollection<string> InvalidLetters { get; private set; }
+        public ObservableCollection<char> UserPossibilities { get; private set; }
+        public ObservableCollection<char> MisGuessedLetters { get; private set; }
         public ObservableCollection<WordLetter> WordLetters { get; private set; }
         public Life Life { get; private set; }
         public ICommand TryLetterCommand { get; private set; }
-        public string SelectedLetter { get; set; }
+        public char UserChoice { get; set; }
 
         public HangmanViewModel()
         {
             var unrevealedWord = new UnrevealedWord(Word.GetRandom());
-            AllLetters = new ObservableCollection<string>(GetAllLetters());
             WordLetters = new ObservableCollection<WordLetter>(unrevealedWord.Letters);
+            UserPossibilities = new ObservableCollection<char>(GetUserPosibilities());
             TryLetterCommand = new Command(TryLetter);
 
-            ivate set = new ObservableCollection<string>();
-            SelectedLetter = AllLetters[0];
+            MisGuessedLetters = new ObservableCollection<char>();
+            UserChoice = UserPossibilities[0];
 
             hangmanGame = new HangmanGame(unrevealedWord);
-            Life = hangmanGame.Life;
+            Life = new Life(hangmanGame.MaximumLife);
         }
 
         private void TryLetter()
         {
-            hangmanGame.TryLetter(SelectedLetter);
-            RefreshInvalidLetters(hangmanGame.InvalidLetters);
-            Life = hangmanGame.Life;
+            hangmanGame.TryLetter(UserChoice);
+            RefreshMisGuessedLetters(hangmanGame.InvalidLetters);
+            Life.Current = hangmanGame.CurrentLife;
         }
 
-        private void RefreshInvalidLetters(IEnumerable<string> invalidLetters)
+        private void RefreshMisGuessedLetters(IEnumerable<char> misGuessedLetters)
         {
-            InvalidLetters.Clear();
-            foreach (var invalidLetter in invalidLetters)
+            MisGuessedLetters.Clear();
+            foreach (var letter in misGuessedLetters)
             {
-                InvalidLetters.Add(invalidLetter);
+                MisGuessedLetters.Add(letter);
             }
         }
 
-        private static IEnumerable<string> GetAllLetters()
+        private static IEnumerable<char> GetUserPosibilities()
         {
-            var unselectedLetters = new List<string>();
+            var userPosibilities = new List<char>();
             for (char i = 'A'; i <= 'Z'; i++)
             {
-                unselectedLetters.Add(i.ToString());
+                userPosibilities.Add(i);
             }
 
-            return unselectedLetters;
+            return userPosibilities;
         }
     }
 }

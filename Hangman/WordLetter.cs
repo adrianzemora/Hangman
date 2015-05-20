@@ -3,11 +3,11 @@ namespace Hangman
 {
     public class WordLetter : NotifyPropertyChanged
     {
-        private string displayValue;
+        private char displayValue;
 
-        public string Value { get; private set; }
+        public char Value { get; private set; }
 
-        public string DisplayValue
+        public char DisplayValue
         {
             get { return displayValue; }
             set
@@ -17,10 +17,10 @@ namespace Hangman
             }
         }
 
-        public WordLetter(string value)
+        public WordLetter(char value)
         {
             Value = value;
-            displayValue = "_";
+            displayValue = '_';
         }
     }
 }
