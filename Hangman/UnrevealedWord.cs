@@ -41,7 +41,7 @@ namespace Hangman
         }
 
 
-        public void Reveal()
+        public void RevealAllLetters()
         {
             foreach (var wordLetter in Letters)
             {

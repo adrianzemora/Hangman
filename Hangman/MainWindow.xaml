@@ -4,6 +4,7 @@
         Title="MainWindow" Height="350" Width="540" ResizeMode="NoResize">
     <Grid>
         <WrapPanel Orientation="Horizontal" Height="68" Margin="20,15,20.6,239.4" Width="493">
+            <Label Content="Target word: "></Label>
             <ItemsControl ItemsSource="{Binding WordLetters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -17,8 +18,8 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </WrapPanel>
-        <WrapPanel  HorizontalAlignment="Left" Height="135" Margin="20,83,0,0" VerticalAlignment="Top" Width="493">
-            <ListBox BorderThickness="0" ItemsSource="{Binding UntriedLetters}" SelectedItem="{Binding SelectedLetter}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <WrapPanel  HorizontalAlignment="Left" Height="112" Margin="20,83,0,0" VerticalAlignment="Top" Width="493">
+            <ListBox BorderThickness="0" ItemsSource="{Binding AllLetters}" SelectedItem="{Binding SelectedLetter}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel></WrapPanel>
@@ -37,12 +38,26 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>
         </WrapPanel>
+        <WrapPanel Margin="20,200,20.6,60.4">
+            <Label Content="Tried letters:" BorderThickness="1"></Label>
+            <ItemsControl ItemsSource="{Binding TriedLetters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding}" BorderThickness="1" BorderBrush="#FF43B1E8" FontWeight="Bold"></Label>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </WrapPanel>
         <Button Content="Try the selected letter" Command="{Binding TryLetterCommand}" Margin="20,262,378.6,11.4"></Button>
         <Label Content="Lives Left:" HorizontalAlignment="Left" Margin="289,285,0,0" VerticalAlignment="Top"/>
         <Grid Margin="355,284,9.6,10.4" >
             <ProgressBar  Value="{Binding Life.Current}" Maximum="{Binding Life.Maximum}"></ProgressBar>
             <Label Content="{Binding Life.Current}" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
         </Grid>
-
     </Grid>
 </Window>
