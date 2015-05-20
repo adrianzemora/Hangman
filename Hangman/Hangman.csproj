@@ -49,6 +49,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="HangmanGame.cs" />
     <Compile Include="UnrevealedWord.cs" />
     <Compile Include="Life.cs" />
     <Compile Include="NotifyPropertyChanged.cs" />

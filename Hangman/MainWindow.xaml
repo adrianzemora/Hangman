@@ -39,8 +39,8 @@
             </ListBox>
         </WrapPanel>
         <WrapPanel Margin="20,200,20.6,60.4">
-            <Label Content="Tried letters:" BorderThickness="1"></Label>
-            <ItemsControl ItemsSource="{Binding TriedLetters}">
+            <Label Content="Invalid letters:" BorderThickness="1"></Label>
+            <ItemsControl ItemsSource="{Binding InvalidLetters}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal"></WrapPanel>

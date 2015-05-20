@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Windows;
 using System.Windows.Input;
 
 namespace Hangman
 {
     public class HangmanViewModel
     {
-        private readonly UnrevealedWord unrevealedWord;
+        private readonly HangmanGame hangmanGame;
 
         public ObservableCollection<string> AllLetters { get; private set; }
-        public ObservableCollection<string> TriedLetters { get; private set; }
+        public ObservableCollection<string> InvalidLetters { get; private set; }
         public ObservableCollection<WordLetter> WordLetters { get; private set; }
         public Life Life { get; private set; }
         public ICommand TryLetterCommand { get; private set; }
@@ -19,84 +17,32 @@ namespace Hangman
 
         public HangmanViewModel()
         {
-            unrevealedWord = new UnrevealedWord(Word.GetRandom());
+            var unrevealedWord = new UnrevealedWord(Word.GetRandom());
             AllLetters = new ObservableCollection<string>(GetAllLetters());
             WordLetters = new ObservableCollection<WordLetter>(unrevealedWord.Letters);
             TryLetterCommand = new Command(TryLetter);
-            Life = new Life(6);
 
-            TriedLetters = new ObservableCollection<string>(GetTriedLetters());
-            SelectedLetter = TriedLetters[1];
+            ivate set = new ObservableCollection<string>();
+            SelectedLetter = AllLetters[0];
+
+            hangmanGame = new HangmanGame(unrevealedWord);
+            Life = hangmanGame.Life;
         }
 
         private void TryLetter()
         {
-            if (LetterAlreadyTried())
-            {
-                return;
-            }
-
-            TriedLetters.Add(SelectedLetter);
-
-            if (!unrevealedWord.IsValidLetter(SelectedLetter))
-            {
-                ProcessInvalidLetter();
-                return;
-            }
-
-            ProcessValidLetter();
+            hangmanGame.TryLetter(SelectedLetter);
+            RefreshInvalidLetters(hangmanGame.InvalidLetters);
+            Life = hangmanGame.Life;
         }
 
-        private void ProcessInvalidLetter()
+        private void RefreshInvalidLetters(IEnumerable<string> invalidLetters)
         {
-            Life.Current--;
-
-            if (LivesLeft())
+            InvalidLetters.Clear();
+            foreach (var invalidLetter in invalidLetters)
             {
-                return;
+                InvalidLetters.Add(invalidLetter);
             }
-
-            unrevealedWord.RevealAllLetters();
-
-            if (RestartGame())
-            {
-                Process.Start(Application.ResourceAssembly.Location);
-            }
-
-            Application.Current.Shutdown();
-        }
-
-        private void ProcessValidLetter()
-        {
-            unrevealedWord.RevealLetter(SelectedLetter);
-
-            if (!unrevealedWord.IsRevealed())
-            {
-                return;
-            }
-
-            if (RestartGame())
-            {
-                Process.Start(Application.ResourceAssembly.Location);
-            }
-
-            Application.Current.Shutdown();
-        }
-
-        private bool LetterAlreadyTried()
-        {
-            return TriedLetters.Contains(SelectedLetter);
-        }
-
-        private bool LivesLeft()
-        {
-            return Life.Current > 0;
-        }
-
-        private static bool RestartGame()
-        {
-            return MessageBox.Show(string.Format("Try Again?"), "Game Over", MessageBoxButton.YesNo,
-                MessageBoxImage.Asterisk) == MessageBoxResult.Yes;
         }
 
         private static IEnumerable<string> GetAllLetters()
@@ -108,21 +54,6 @@ namespace Hangman
             }
 
             return unselectedLetters;
-        }
-
-        private IEnumerable<string> GetTriedLetters()
-        {
-            List<string> triedLetters = new List<string>();
-            string firstLetter = unrevealedWord.Letters[0].Value;
-            triedLetters.Add(firstLetter);
-
-            string lastLetter = unrevealedWord.Letters[unrevealedWord.Letters.Count - 1].Value;
-            if (!triedLetters.Contains(lastLetter))
-            {
-                triedLetters.Add(lastLetter);
-            }
-
-            return triedLetters;
         }
     }
 }
